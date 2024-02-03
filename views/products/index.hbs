@@ -1,0 +1,35 @@
+{{#extends "base"}}
+
+    {{#block "content"}}
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Price</td>
+                    <td>Description</td>
+                    <td>Expiry Date</td>
+                    <td>UoM</td>
+                    <td>Categories</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each products}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.exp}}</td>
+                    <td>{{this.uom}}</td>
+                    <td>{{this.category}}</td>
+                    <td>
+                        <a href="/customers/{{this.product_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+                        <a href="/customers/{{this.product_id}}/update" class="btn btn-success btn-sm">Update</a> 
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    {{/block}}
+
+{{/extends}}

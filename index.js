@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: false}));
 app.set('view engine', 'hbs');
 
 wax.on(hbs.handlebars);
-wax.setLayoutPath('.views/layout');
+wax.setLayoutPath('views/layouts');
 
 async function main() {
     const connection = await mysql2.createConnection({
@@ -37,16 +37,21 @@ async function main() {
     })
 
 
-    app.get('customers/create', async function (req,res) {
+    app.get('/products/create', async function (req,res) {
+        console.log('hello')
         const [categories] = await connection.execute(`SELECT * from categories`);
-        res.render("products/create", {
-            categories
-        });
-
         const [uoms] = await connection.execute(`SELECT * from uoms`);
         res.render("products/create", {
+            categories,
             uoms
         });
+
+    })
+
+    app.post('/products/create', async function(req, res) {
+        const {name, price, description, exp, uom_id, category_id} = req.body;
+        await connection.execute(query, bindings);
+        res.redirect('products');
     })
 }
 

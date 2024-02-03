@@ -1,28 +1,49 @@
 {{#extends "base"}}
 {{#block "content"}}
-        <h2>Customer Form</h2>
+        <h2>Add Product Form</h2>
         <form method="post"> <!-- Replace /your-endpoint with your form submission endpoint -->
+            <!-- Name Field -->
             <div class="mb-3">
-                <label for="firstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="firstName" name="first_name" required>
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
             </div>
 
+            <!-- Price Field -->
             <div class="mb-3">
-                <label for="lastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="lastName" name="last_name" required>
+                <label for="price" class="form-label">Price</label>
+                <input type="number" class="form-control" id="price" name="price" required>
             </div>
 
+            <!-- Description Field -->
             <div class="mb-3">
-                <label for="rating" class="form-label">Rating</label>
-                <input type="number" class="form-control" id="rating" name="rating">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
             </div>
 
+            <!-- Expiry Date Field -->
             <div class="mb-3">
-                <label for="companyId" class="form-label">Company ID</label>
-                <select class="form-control" id="companyId" name="company_id">
-                    <option id="0">------</option>
-                    {{#each companies}}
-                        <option value="{{this.company_id}}">{{this.name}}</option>
+                <label for="expiryDate" class="form-label">Expiry Date</label>
+                <input type="date" class="form-control" id="expiryDate" name="expiry_date" required>
+            </div>
+
+            <!-- UoM Field -->
+            <div class="mb-3">
+                <label for="uomId" class="form-label">Unit of Measurement</label>
+                <select class="form-control" id="uomId" name="uom_id">
+                    <option value="">------</option>
+                    {{#each uoms}}
+                        <option value="{{this.uom_id}}">{{this.uom}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <!-- Category Field -->
+            <div class="mb-3">
+                <label for="categoryId" class="form-label">Category</label>
+                <select class="form-control" id="categoryId" name="category_id">
+                    <option value="">------</option>
+                    {{#each categories}}
+                        <option value="{{this.category_id}}">{{this.category}}</option>
                     {{/each}}
                 </select>
             </div>
