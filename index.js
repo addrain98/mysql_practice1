@@ -24,7 +24,7 @@ async function main() {
         database: process.env.DB_DATABASE,
         password: process.env.DB_PASSWORD
     });
-
+//read
     app.get('/products', async function(req, res) {
         const [products] = await connection.execute(`
             SELECT * from products
@@ -36,9 +36,8 @@ async function main() {
         })
     })
 
-
+// create
     app.get('/products/create', async function (req,res) {
-        console.log('hello')
         const [categories] = await connection.execute(`SELECT * from categories`);
         const [uoms] = await connection.execute(`SELECT * from uoms`);
         res.render("products/create", {
@@ -53,7 +52,55 @@ async function main() {
         await connection.execute(query, bindings);
         res.redirect('products');
     })
+
+    //delete
+    app.get('/products/:product_id/delete', async function (req, res) {
+        const sql = "select * from products where product_id = ?";
+        const [products] = await connection.execute(sql, [req.params.product_id]);
+        const product = products[0];
+        res.render('products/delete', {
+            product,
+        })
+    });
+
+
+    app.post('/products/:product_id/delete', async function (req, res) {
+        const query = "DELETE FROM products WHERE product_id = ?";
+        await connection.execute(query, [req.params.product_id]);
+        res.redirect('/products');
+    });
+
+    app.get('/products/:product_id/update', async function (req, res) {
+        const query = "SELECT * FROM products WHERE product_id = ?";
+        const [products] = await connection.execute(query, [req.params.product_id]);
+        const product = products[0];
+    
+        const [category] = await connection.execute(`SELECT * from categories`);
+        const [uom] = await connection.execute(`SELECT * from uoms`);
+    
+        res.render('products/update', {
+            product, category, uom
+        })
+    });
+    
+    app.post('/customers/:customer_id/update', async function (req, res) {
+        const { name, price, description, exp, uom_id, category_id } = req.body;
+        const query = `UPDATE products SET name=?,
+                                            price =?,
+                                            description =?,
+                                            exp =?,
+                                            uom_id=?,
+                                            category_id
+                                        WHERE product_id = ?
+        `;
+        const bindings = [name, price, description, exp, uom_id, category_id, req.params.product_id];
+        await connection.execute(query, bindings);
+        res.redirect('/products');
+    })
 }
+
+
+
 
 main();
 
