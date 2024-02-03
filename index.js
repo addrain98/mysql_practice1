@@ -70,6 +70,7 @@ async function main() {
         res.redirect('/products');
     });
 
+//update
     app.get('/products/:product_id/update', async function (req, res) {
         const query = "SELECT * FROM products WHERE product_id = ?";
         const [products] = await connection.execute(query, [req.params.product_id]);
@@ -97,6 +98,53 @@ async function main() {
         await connection.execute(query, bindings);
         res.redirect('/products');
     })
+
+    //create new uom
+    app.get('/uoms/create', async function (req, res) {
+        const [uoms] = await connection.execute(`SELECT * from uoms`);
+        const [products] = await connection.execute(`SELECT * FROM products`);
+      
+        res.render("uoms/create", {
+            uoms, products
+        });
+    });
+
+    // Process the form to create a new uom
+    app.post('/uoms/create', async function (req, res) {
+        const { uom, description  } = req.body;
+        const query = `
+        INSERT INTO uoms (uom, description) 
+        VALUES (?, ?)
+    `;
+        const bindings = [uom, description];
+        const [results] = await connection.execute(query, bindings);
+        
+        // The employee has been created, get the ID of the new employee
+        const newUomId = results.insertId; 
+
+        for (let p of products) {
+            const query = `INSERT INTO uomproduct (uom_id, product_id)
+                VALUES (?, ?)
+            `;
+            await connection.execute(query, [newUomId, p])
+        }
+
+        res.redirect('/uoms');
+    });
+
+    // Route to display a table of UoMs
+    app.get('/uoms', async function (req, res) {
+        try {
+            const [uoms] = await connection.execute(`SELECT * FROM uoms;`);
+            console.log(uoms); // To check the data
+            res.render('uoms/index', {
+                uoms
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send("Internal Server Error");
+        }
+    });
 }
 
 

@@ -1,0 +1,26 @@
+{{#extends 'base'}}
+
+{{#block "content"}}
+<h2>UoM List</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>UoM</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each uoms}}
+        <tr>
+            <td>{{this.uom_id}}</td>
+            <td>{{this.uom}}</td>
+            <td>{{this.description}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{/block}}
+
+{{/extends}}
