@@ -1,0 +1,33 @@
+{{#extends "base"}}
+{{#block "content"}}
+        <h2>Customer Form</h2>
+        <form method="post"> <!-- Replace /your-endpoint with your form submission endpoint -->
+            <div class="mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" name="first_name" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" name="last_name" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating</label>
+                <input type="number" class="form-control" id="rating" name="rating">
+            </div>
+
+            <div class="mb-3">
+                <label for="companyId" class="form-label">Company ID</label>
+                <select class="form-control" id="companyId" name="company_id">
+                    <option id="0">------</option>
+                    {{#each companies}}
+                        <option value="{{this.company_id}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        {{/block}}
+{{/extends}}

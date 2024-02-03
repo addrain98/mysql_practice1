@@ -18,18 +18,18 @@ wax.on(hbs.handlebars);
 wax.setLayoutPath('.views/layout');
 
 async function main() {
-    const connection = await mysql12.createConnection({
+    const connection = await mysql2.createConnection({
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
         database: process.env.DB_DATABASE,
-        password: process.env.DB.PASSWORD
+        password: process.env.DB_PASSWORD
     });
 
     app.get('/products', async function(req, res) {
-        const [customers] = await connection.execute(`
+        const [products] = await connection.execute(`
             SELECT * from products
                 JOIN categories ON products.category_id = categories.category_id
-                JOIN uom ON products.uom_id = uom.uom_id;
+                JOIN uoms ON products.uom_id = uoms.uom_id;
         `);
         res.render('products/index', {
             products
@@ -37,9 +37,21 @@ async function main() {
     })
 
 
-    /*app.get('customers/create', async function (req,res) {
-        const []
-    })*/
+    app.get('customers/create', async function (req,res) {
+        const [categories] = await connection.execute(`SELECT * from categories`);
+        res.render("products/create", {
+            categories
+        });
+
+        const [uoms] = await connection.execute(`SELECT * from uoms`);
+        res.render("products/create", {
+            uoms
+        });
+    })
 }
 
+main();
 
+app.listen(3000, () => {
+    console.log("server has started");
+})
