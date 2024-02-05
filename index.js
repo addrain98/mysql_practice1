@@ -132,6 +132,22 @@ async function main() {
         res.redirect('/uoms');
     });
 
+    app.get('/uoms/:uom_id/delete', async function (req, res) {
+        const sql = "select * from uoms where uom_id = ?";
+        const [uoms] = await connection.execute(sql, [req.params.uom_id]);
+        const uom = uoms[0];
+        res.render('uoms/delete', {
+            uom,
+        })
+    });
+
+
+    app.post('/uoms/:uom_id/delete', async function (req, res) {
+        const query = "DELETE FROM uoms WHERE uom_id = ?";
+        await connection.execute(query, [req.params.uom_id]);
+        res.redirect('/uoms');
+    });
+
     // Route to display a table of UoMs
     app.get('/uoms', async function (req, res) {
         try {
