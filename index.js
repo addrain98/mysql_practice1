@@ -84,14 +84,14 @@ async function main() {
         })
     });
     
-    app.post('/customers/:customer_id/update', async function (req, res) {
+    app.post('/products/:product_id/update', async function (req, res) {
         const { name, price, description, exp, uom_id, category_id } = req.body;
         const query = `UPDATE products SET name=?,
                                             price =?,
                                             description =?,
                                             exp =?,
                                             uom_id=?,
-                                            category_id
+                                            category_id=?
                                         WHERE product_id = ?
         `;
         const bindings = [name, price, description, exp, uom_id, category_id, req.params.product_id];
@@ -136,7 +136,6 @@ async function main() {
     app.get('/uoms', async function (req, res) {
         try {
             const [uoms] = await connection.execute(`SELECT * FROM uoms;`);
-            console.log(uoms); // To check the data
             res.render('uoms/index', {
                 uoms
             });
