@@ -29,3 +29,9 @@ INSERT INTO categories (category) VALUES ("nutrient");
 INSERT INTO uoms (uom, description) VALUES ("set", "5kg A & 5kg B");
 
 INSERT INTO products (name, price, description, exp, uom_id, category_id) VALUES ("CGA-Lettuce Nutrient", 10, "solid nutrients",'2025-01-05', 1, 1)
+CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON *.* TO 'username'@'localhost';
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';
+FLUSH PRIVILEGES;
+

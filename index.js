@@ -46,6 +46,40 @@ async function main() {
         });
 
     })
+    app.post('/products/create', async function(req, res) {
+        const { name, price, description, exp, uom_id, category_id } = req.body;
+        
+        try {
+            // Check if UOM exists
+            const [uoms] = await connection.execute('SELECT * FROM uoms WHERE uom_id = ?', [uom_id]);
+            if (uoms.length === 0) {
+                return res.status(400).json({
+                    'error': 'Invalid UOM ID'
+                });
+            }
+    
+            // Check if Category exists
+            const [categories] = await connection.execute('SELECT * FROM categories WHERE category_id = ?', [category_id]);
+            if (categories.length === 0) {
+                return res.status(400).json({
+                    'error': 'Invalid Category ID'
+                });
+            }
+            
+            // If both checks pass, insert the product
+            const query = 'INSERT INTO products (name, price, description, exp, uom_id, category_id) VALUES (?, ?, ?, ?, ?, ?)';
+            console.log({ name, price, description, exp, uom_id, category_id });
+            const [results] = await connection.execute(query, [name, price, description, exp, uom_id, category_id]);
+            res.json(results);
+        } catch (error) {
+            console.error('Error inserting product:', error);
+            res.status(500).json({
+                'error': 'Server error while creating product',
+                'details': error.message  
+            });
+        }
+    });
+    
 
     app.post('/products/create', async function(req, res) {
         const {name, price, description, exp, uom_id, category_id} = req.body;
