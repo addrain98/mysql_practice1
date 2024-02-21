@@ -47,9 +47,21 @@ async function main() {
 
     })
     app.post('/products/create', async function(req, res) {
-        const { name, price, description, exp, uom_id, category_id } = req.body;
+        let { name, price, description, exp, uom_id, category_id } = req.body;
         
         try {
+            // Convert any undefined values to null explicitly
+
+            if (exp) {
+                const expDate = new Date(exp);
+                const year = expDate.getFullYear();
+                const month = ('0' + (expDate.getMonth() + 1)).slice(-2); // getMonth() is zero-based; add 1 to compensate and pad with leading 0
+                const day = ('0' + expDate.getDate()).slice(-2); // pad with leading 0
+                exp = `${year}-${month}-${day}`; // reassign exp in yyyy/mm/dd format
+            }
+
+            console.log(exp)
+
             // Check if UOM exists
             const [uoms] = await connection.execute('SELECT * FROM uoms WHERE uom_id = ?', [uom_id]);
             if (uoms.length === 0) {
@@ -71,6 +83,7 @@ async function main() {
             console.log({ name, price, description, exp, uom_id, category_id });
             const [results] = await connection.execute(query, [name, price, description, exp, uom_id, category_id]);
             res.json(results);
+
         } catch (error) {
             console.error('Error inserting product:', error);
             res.status(500).json({
@@ -80,12 +93,6 @@ async function main() {
         }
     });
     
-
-    app.post('/products/create', async function(req, res) {
-        const {name, price, description, exp, uom_id, category_id} = req.body;
-        await connection.execute(query, bindings);
-        res.redirect('products');
-    })
 
     //delete
     app.get('/products/:product_id/delete', async function (req, res) {
