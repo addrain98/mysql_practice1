@@ -78,7 +78,7 @@ async function main() {
                 });
             }
             
-            // If both checks pass, insert the product
+            // If all checks pass, insert the product
             const query = 'INSERT INTO products (name, price, description, exp, uom_id, category_id) VALUES (?, ?, ?, ?, ?, ?)';
             console.log({ name, price, description, exp, uom_id, category_id });
             const [results] = await connection.execute(query, [name, price, description, exp, uom_id, category_id]);
@@ -160,16 +160,6 @@ async function main() {
         const bindings = [uom, description];
         const [results] = await connection.execute(query, bindings);
         
-        // The employee has been created, get the ID of the new employee
-        const newUomId = results.insertId; 
-
-        for (let p of products) {
-            const query = `INSERT INTO uomproduct (uom_id, product_id)
-                VALUES (?, ?)
-            `;
-            await connection.execute(query, [newUomId, p])
-        }
-
         res.redirect('/uoms');
     });
 

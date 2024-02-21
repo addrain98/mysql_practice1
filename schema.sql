@@ -19,11 +19,11 @@ CREATE TABLE categories (
 
 alter table products add column uom_id int unsigned;
 alter table products add constraint fk_products_uoms
-    foreign key (uom_id) references uoms(uom_id);
+foreign key (uom_id) references uoms(uom_id);
 
 alter table products add column category_id int unsigned;
 alter table products add constraint fk_products_categories
-    foreign key (category_id) references categories(category_id);
+foreign key (category_id) references categories(category_id);
 
 INSERT INTO categories (category) VALUES ("nutrient");
 INSERT INTO uoms (uom, description) VALUES ("set", "5kg A & 5kg B");
