@@ -82,7 +82,7 @@ async function main() {
             const query = 'INSERT INTO products (name, price, description, exp, uom_id, category_id) VALUES (?, ?, ?, ?, ?, ?)';
             console.log({ name, price, description, exp, uom_id, category_id });
             const [results] = await connection.execute(query, [name, price, description, exp, uom_id, category_id]);
-            res.json(results);
+            res.redirect('/products');
 
         } catch (error) {
             console.error('Error inserting product:', error);
