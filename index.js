@@ -191,6 +191,57 @@ async function main() {
             res.status(500).send("Internal Server Error");
         }
     });
+
+    app.get('/categories/create', async function (req, res) {
+        const [categories] = await connection.execute(`SELECT * from categories`);
+        const [products] = await connection.execute(`SELECT * FROM products`);
+      
+        res.render("categories/create", {
+            categories, products
+        });
+    });
+
+    // Process the form to create a new category
+    app.post('/categories/create', async function (req, res) {
+        const category = req.body.category;
+        const query = `
+        INSERT INTO categories (category) 
+        VALUES (?)
+    `;
+        const binding = [category];
+        const [results] = await connection.execute(query, binding);
+        
+        res.redirect('/categories');
+    });
+
+    app.get('/categories/:category_id/delete', async function (req, res) {
+        const sql = "select * from categories where category_id = ?";
+        const [categories] = await connection.execute(sql, [req.params.category_id]);
+        const category = categories[0];
+        res.render('categories/delete', {
+            category,
+        })
+    });
+
+
+    app.post('/categories/:category_id/delete', async function (req, res) {
+        const query = "DELETE FROM categories WHERE category_id = ?";
+        await connection.execute(query, [req.params.category_id]);
+        res.redirect('/categories');
+    });
+
+    // Route to display a table of categories
+    app.get('/categories', async function (req, res) {
+        try {
+            const [categories] = await connection.execute(`SELECT * FROM categories;`);
+            res.render('categories/index', {
+                categories
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send("Internal Server Error");
+        }
+    });
 }
 
 
