@@ -63,8 +63,6 @@ async function main() {
                 exp = `${year}-${month}-${day}`; // reassign exp in yyyy/mm/dd format
             }
 
-            console.log(exp)
-
             // Check if UOM exists
             const [uoms] = await connection.execute('SELECT * FROM uoms WHERE uom_id = ?', [uom_id]);
             if (uoms.length === 0) {
