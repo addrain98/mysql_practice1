@@ -44,7 +44,7 @@
                     <option value="">------</option>
                     {{#each categories}}
                         <option value="{{this.category_id}}"
-                        {{#eq this.category_id ../product.category_id}}
+                        {{#eq this.category_id ../products.category_id}}
                                 selected
                         {{/eq}}>{{this.category}}</option>
                     {{/each}}

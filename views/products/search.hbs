@@ -1,0 +1,41 @@
+{{#extends "base"}}
+
+{{#block "content"}}
+<form method="GET">
+    <input type="text" name="searchTerms" class="form-control mt-2" />
+    <input type="submit" class="btn btn-primary mt-2 ms-2" value="Search"/>
+</form>
+
+{{#extends "base"}}
+
+    {{#block "content"}}
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Price</td>
+                    <td>Description</td>
+                    <td>Expiry Date</td>
+                    <td>UoM</td>
+                    <td>Categories</td>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each products}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.exp}}</td>
+                    <td>{{this.uom}}</td>
+                    <td>{{this.category}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    {{/block}}
+
+{{/extends}}
+{{/block}}
+
+{{/extends}}

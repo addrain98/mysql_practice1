@@ -31,6 +31,9 @@ async function main() {
                 JOIN categories ON products.category_id = categories.category_id
                 JOIN uoms ON products.uom_id = uoms.uom_id;
         `);
+        products.forEach(product => {
+            product.exp = new Date(product.exp).toDateString(); // Converts date to a more readable format without time
+        });
         res.render('products/index', {
             products
         })
@@ -117,11 +120,11 @@ async function main() {
         const [products] = await connection.execute(query, [req.params.product_id]);
         const product = products[0];
     
-        const [category] = await connection.execute(`SELECT * from categories`);
-        const [uom] = await connection.execute(`SELECT * from uoms`);
+        const [categories] = await connection.execute(`SELECT * from categories`);
+        const [uoms] = await connection.execute(`SELECT * from uoms`);
     
         res.render('products/update', {
-            product, category, uom
+            product, categories, uoms
         })
     });
     
@@ -139,6 +142,37 @@ async function main() {
         await connection.execute(query, bindings);
         res.redirect('/products');
     })
+
+    //search products
+    app.get('/products/search', async function (req, res) {
+        try {
+            let sql = `SELECT products.*, uoms.uom, categories.category
+                       FROM products 
+                       LEFT JOIN uoms ON products.uom_id = uoms.uom_id
+                       LEFT JOIN categories ON products.category_id = categories.category_id
+                       WHERE 1`;
+    
+            const bindings = [];
+            if (req.query.searchTerms) {
+                sql += ` AND (products.name LIKE ? OR categories.category LIKE ?)`;
+                bindings.push(`%${req.query.searchTerms}%`, `%${req.query.searchTerms}%`);
+            }
+    
+            const [products] = await connection.execute(sql, bindings);
+            products.forEach(product => {
+                product.exp = new Date(product.exp).toDateString();
+            });
+    
+            const [categories] = await connection.execute(`SELECT * FROM categories`);
+            const [uoms] = await connection.execute(`SELECT * FROM uoms`);
+            
+            res.render('products/search', { products, categories, uoms });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('An error occurred while fetching the products.');
+        }
+    });
+    
 
     //create new uom
     app.get('/uoms/create', async function (req, res) {
