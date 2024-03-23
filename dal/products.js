@@ -77,7 +77,15 @@ const updateProduct = async(product_id, updatedProduct) => {
             const [result] = await dbtool.pool.execute(query, bindings);
             return result;
 }
+
+const deleteProduct = async(product_id) => {
+    const query = "DELETE FROM products WHERE product_id = ?";
+    const [result] = await dbtool.pool.execute(query, [product_id]);
+    return result;
+}
+
 module.exports = {getProducts,
                   createProduct,
-                  updateProduct
+                  updateProduct,
+                  deleteProduct
                  }

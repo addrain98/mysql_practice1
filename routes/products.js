@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {getProducts, createProduct, updateProduct} = require('../dal/products')
+const {getProducts, createProduct, updateProduct, deleteProduct} = require('../dal/products')
 
 router.get('/', async function(req, res) {
     const productData = await getProducts()
@@ -17,6 +17,11 @@ router.post('/', async function(req,res) {
 
 router.put('/:product_id', async function(req,res) {
     const data = await updateProduct(req.params.product_id, req.body)
+    res.json(data);
+})
+
+router.delete('/:product_id', async function(req,res) {
+    const data = await deleteProduct(req.params.product_id)
     res.json(data);
 })
 
