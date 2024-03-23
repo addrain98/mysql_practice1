@@ -32,7 +32,7 @@
                 <select class="form-control" id="uomId" name="uom_id">
                     <option value="">------</option>
                     {{#each uoms}}
-                        <option value="{{this.uom_id}}">{{this.uom}}</option>
+                        <option value="{{this.uom_id}}">{{this.uom}}, {{this.description}}</option>
                     {{/each}}
                 </select>
             </div>
