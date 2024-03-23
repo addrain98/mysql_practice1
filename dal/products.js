@@ -1,7 +1,7 @@
 const res = require('express/lib/response.js');
 const dbtool = require('../dbtool.js')
 
-const getProducts = async() => {
+const getAllProducts = async() => {
     let [products] = await dbtool.pool.execute(`
         SELECT * from products
             JOIN categories ON products.category_id = categories.category_id
@@ -14,7 +14,7 @@ const getProducts = async() => {
     return products
 }
 
-const createProduct = async(data) => {
+const createOneProduct = async(data) => {
     let { name, price, description, exp, uom_id, category_id } = data;
 
             try {
@@ -56,7 +56,7 @@ const createProduct = async(data) => {
             }
 }
 
-const updateProduct = async(product_id, updatedProduct) => {
+const updateOneProduct = async(product_id, updatedProduct) => {
     let { name, price, description, exp, uom_id, category_id } = updatedProduct;
     if (exp) {
         const expDate = new Date(exp);
@@ -78,14 +78,14 @@ const updateProduct = async(product_id, updatedProduct) => {
             return result;
 }
 
-const deleteProduct = async(product_id) => {
+const deleteOneProduct = async(product_id) => {
     const query = "DELETE FROM products WHERE product_id = ?";
     const [result] = await dbtool.pool.execute(query, [product_id]);
     return result;
 }
 
-module.exports = {getProducts,
-                  createProduct,
-                  updateProduct,
-                  deleteProduct
+module.exports = {getAllProducts,
+                  createOneProduct,
+                  updateOneProduct,
+                  deleteOneProduct
                  }

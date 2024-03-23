@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {getProducts, createProduct, updateProduct, deleteProduct} = require('../dal/products')
+const {getProducts, createProduct, updateProduct, deleteProduct} = require('../services/products')
 
 router.get('/', async function(req, res) {
     const productData = await getProducts()
